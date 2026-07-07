@@ -61,6 +61,8 @@ struct HashScreenNameSecond {
     }
 };
 
+//Clase generica de tabla hash cerrada
+//Recibe como template una funcion hash principal y una secundaria
 template <typename HashFunc, typename SecondHashFunc>
 class HashTableClosed {
 private:
@@ -85,6 +87,7 @@ private:
     HashFunc hashFunction;
     SecondHashFunc secondHashFunction;
 
+    //Verifica si el numero es primo
     bool isPrime(size_t n) const {
         if (n < 2) return false;
         if (n == 2) return true;
@@ -97,6 +100,7 @@ private:
         return false;
     }
 
+    //Busca eñ siguiente numero primo mayor o igual a n
     size_t nextPrime(size_t n) const {
         while (!isPrime(n)) {
             n++;
@@ -105,22 +109,28 @@ private:
         return n;
     }
 
+    //Calcula la posicion que se revisara en la tabla
     size_t getIndex(const std::string& key, size_t attempt) const {
         size_t hash1 = hashFunction(key) % capacity;
 
+        //Linear probing
         if (strategy == ProbingStrategy::LINEAR){
             return (hash1 + attempt) % capacity;
         }
         
+        //Quadratic probing
         if (strategy == ProbingStrategy::QUADRATIC) {
             return (hash1 + attempt * attempt) % capacity;
         }
 
+        //Double hashing
         size_t hash2 = 1 + (secondHashFunction(key) % (capacity - 1));
         return (hash1 + attempt * hash2) % capacity;
     }
 
 public:
+
+    //Constructor de la tabla
     HashTableClosed(size_t initialCapacity = 400009,
                     ProbingStrategy probingStrategy = ProbingStrategy::LINEAR) {
         capacity = nextPrime(initialCapacity);
@@ -130,10 +140,12 @@ public:
         table = new HashEntry[capacity];
     }
 
+    //Destructor
     ~HashTableClosed() {
         delete[] table;
     }
 
+    //Inserta una clave en la tabla
     void insert(const std::string&key) {
         if (key.empty()) {
             return;
@@ -161,6 +173,7 @@ public:
         std::cerr << "tabla hash cerrada llena.\n";
     }
 
+    //Busca una clave y retorna su contador
     int get(const std::string& key) const {
         for (size_t i = 0; i < capacity; i++) {
             size_t index = getIndex(key, i);
@@ -177,6 +190,7 @@ public:
         return 0;
     }
 
+    //Getters
     size_t size() const {
         return numElements;
     }
@@ -189,10 +203,12 @@ public:
         return collisions;
     }
 
+    //Calcula el factor de carga
     double loadFactor() const {
         return static_cast<double>(numElements) / capacity;
     }
 
+    //Estima la memoria usada por el arreglo principal
     size_t memoryBites() cosnt {
         return capacity * sizeof(HashEntry);
     }
