@@ -67,7 +67,7 @@ template <typename HashFunc, typename SecondHashFunc>
 class HashTableClosed {
 private:
     struct HashEntry {
-        std::string key:
+        std::string key;
         int count;
         bool occupied;
 
@@ -94,10 +94,10 @@ private:
         if (n % 2 == 0) return false;
 
         for (size_t i = 3; i * i <= n; i += 2) {
-            if (n % 1 == 0) return false;
+            if (n % i == 0) return false;
         }
 
-        return false;
+        return true;
     }
 
     //Busca eñ siguiente numero primo mayor o igual a n
@@ -135,7 +135,7 @@ public:
                     ProbingStrategy probingStrategy = ProbingStrategy::LINEAR) {
         capacity = nextPrime(initialCapacity);
         numElements = 0;
-        collsions = 0;
+        collisions = 0;
         strategy = probingStrategy;
         table = new HashEntry[capacity];
     }
@@ -151,7 +151,7 @@ public:
             return;
         }
 
-        for (size_t i = 0, i < capacity; i++) {
+        for (size_t i = 0; i < capacity; i++) {
             size_t index = getIndex(key, i);
 
             if (!table[index].occupied) {
@@ -209,7 +209,7 @@ public:
     }
 
     //Estima la memoria usada por el arreglo principal
-    size_t memoryBites() cosnt {
+    size_t memoryBites() const {
         return capacity * sizeof(HashEntry);
     }
 };
