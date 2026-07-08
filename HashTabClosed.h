@@ -209,7 +209,7 @@ public:
     }
 
     //Estima la memoria usada por el arreglo principal
-    size_t memoryBites() const {
+    size_t memoryBytes() const {
         return capacity * sizeof(HashEntry);
     }
 };

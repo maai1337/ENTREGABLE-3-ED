@@ -1,0 +1,11 @@
+estructura_de_datos;clave;num_elementos;memoria_bytes
+Chaining;user_id;45862;8090621
+Chaining;user_screen_name;45862;8056274
+ClosedLinear;user_id;45862;16000360
+ClosedLinear;user_screen_name;45862;16000360
+ClosedQuadratic;user_id;45862;16000360
+ClosedQuadratic;user_screen_name;45862;16000360
+ClosedDoubleHashing;user_id;45862;16000360
+ClosedDoubleHashing;user_screen_name;45862;16000360
+STLUnorderedMap;user_id;45862;4339277
+STLUnorderedMap;user_screen_name;45862;4304930

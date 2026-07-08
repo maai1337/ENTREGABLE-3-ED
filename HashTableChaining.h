@@ -71,4 +71,23 @@ public:
     }
 
     size_t size() const { return numElements; }
+
+    size_t getBuckets() const { return numBuckets; }
+
+    size_t memoryBytes() const {
+        // Memoria del vector de listas
+        size_t mem = numBuckets * sizeof(std::list<HashNode>);
+        // Memoria de cada nodo en las listas
+        for (size_t i = 0; i < numBuckets; ++i) {
+            for (const auto& node : table[i]) {
+                // Overhead del nodo de la lista (prev + next punteros)
+                mem += 2 * sizeof(void*);
+                // Tamaño del HashNode (string + int)
+                mem += sizeof(HashNode);
+                // Memoria del heap del string (si excede SSO)
+                mem += node.key.capacity();
+            }
+        }
+        return mem;
+    }
 };
