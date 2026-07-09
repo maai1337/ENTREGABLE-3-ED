@@ -26,6 +26,12 @@ struct HashScreenName {
 };
 
 // Se usa template para funcion hash dependiendo de la key
+/**
+ * @brief Implementacion de una Tabla Hash utilizando Encadenamiento.
+ * Utiliza un vector de listas doblemente enlazadas (std::list) para
+ * manejar las colisiones. Dependiendo de la funcion de hash que
+ * se le pase por template (HashFunc), puede indexar IDs u otros campos.
+ */
 template <typename HashFunc>
 class HashTableChaining {
 private:

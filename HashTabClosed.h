@@ -2,14 +2,14 @@
 #include <string>
 #include <iostream>
 
-//Estrategias de hashing cerrado
+// Estrategias de hashing cerrado
 enum class ProbingStrategy {
     LINEAR,
     QUADRATIC,
     DOUBLE_HASHING
 };
 
-//Hash principal para user_id
+// Hash principal para user_id
 struct HashUserIDClosed {
     size_t operator()(const std::string& key) const {
         size_t hash = 0;
@@ -35,7 +35,7 @@ struct HashUserIDSecond {
     }
 };
 
-//Hash principal para user_screen_name usando DJB2
+// Hash principal para user_screen_name usando DJB2
 struct HashScreenNameClosed {
     size_t operator()(const std::string& key) const {
         size_t hash = 5381;
@@ -48,7 +48,7 @@ struct HashScreenNameClosed {
     }
 };
 
-//Hash secundario para user_screen_name, usado en double hashing
+// Hash secundario para user_screen_name, usado en double hashing
 struct HashScreenNameSecond {
     size_t operator()(const std::string& key) const {
         size_t hash = 0;
@@ -60,9 +60,12 @@ struct HashScreenNameSecond {
         return hash;
     }
 };
-
-//Clase generica de tabla hash cerrada
-//Recibe como template una funcion hash principal y una secundaria
+/**
+ * @brief Implementacion de una Tabla Hash utilizando Hashing Cerrado.
+ * Maneja las colisiones mediante Probing Lineal, Cuadratico o Double Hashing,
+ * dependiendo de la estrategia (ProbingStrategy) especificada al instanciarla.
+ * Utiliza arreglos contiguos.
+ */
 template <typename HashFunc, typename SecondHashFunc>
 class HashTableClosed {
 private:
@@ -87,7 +90,7 @@ private:
     HashFunc hashFunction;
     SecondHashFunc secondHashFunction;
 
-    //Verifica si el numero es primo
+    // Verifica si el numero es primo
     bool isPrime(size_t n) const {
         if (n < 2) return false;
         if (n == 2) return true;
@@ -100,7 +103,7 @@ private:
         return true;
     }
 
-    //Busca eñ siguiente numero primo mayor o igual a n
+    // Busca el siguiente numero primo mayor o igual a n
     size_t nextPrime(size_t n) const {
         while (!isPrime(n)) {
             n++;
@@ -109,28 +112,28 @@ private:
         return n;
     }
 
-    //Calcula la posicion que se revisara en la tabla
+    // Calcula la posicion que se revisara en la tabla
     size_t getIndex(const std::string& key, size_t attempt) const {
         size_t hash1 = hashFunction(key) % capacity;
 
-        //Linear probing
+        // Linear probing
         if (strategy == ProbingStrategy::LINEAR){
             return (hash1 + attempt) % capacity;
         }
         
-        //Quadratic probing
+        // Quadratic probing
         if (strategy == ProbingStrategy::QUADRATIC) {
             return (hash1 + attempt * attempt) % capacity;
         }
 
-        //Double hashing
+        // Double hashing
         size_t hash2 = 1 + (secondHashFunction(key) % (capacity - 1));
         return (hash1 + attempt * hash2) % capacity;
     }
 
 public:
 
-    //Constructor de la tabla
+    // Constructor de la tabla
     HashTableClosed(size_t initialCapacity = 400009,
                     ProbingStrategy probingStrategy = ProbingStrategy::LINEAR) {
         capacity = nextPrime(initialCapacity);
@@ -173,7 +176,7 @@ public:
         std::cerr << "tabla hash cerrada llena.\n";
     }
 
-    //Busca una clave y retorna su contador
+    // Busca una clave y retorna su contador
     int get(const std::string& key) const {
         for (size_t i = 0; i < capacity; i++) {
             size_t index = getIndex(key, i);
@@ -190,7 +193,7 @@ public:
         return 0;
     }
 
-    //Getters
+    // Getters
     size_t size() const {
         return numElements;
     }
@@ -203,12 +206,12 @@ public:
         return collisions;
     }
 
-    //Calcula el factor de carga
+    // Calcula el factor de carga
     double loadFactor() const {
         return static_cast<double>(numElements) / capacity;
     }
 
-    //Estima la memoria usada por el arreglo principal
+    // Estima la memoria usada por el arreglo principal
     size_t memoryBytes() const {
         return capacity * sizeof(HashEntry);
     }

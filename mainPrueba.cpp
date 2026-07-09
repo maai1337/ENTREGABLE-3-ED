@@ -3,6 +3,11 @@
 
 using namespace std;
 
+/**
+ * @brief Punto de entrada secundario/de prueba.
+ * Muestra unicamente el funcionamiento basico de la Tabla Hash Cerrada
+ * utilizando diferentes estrategias de probing, insertando pocos valores de prueba.
+ */
 int main() {
     cout << "Prueba Hashing Cerrado\n\n";
 

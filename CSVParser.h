@@ -5,6 +5,11 @@
 #include <vector>
 #include "Tweet.h"
 
+/**
+ * @brief Clase para extraer informacion del dataset.
+ * Permite parsear los archivos CSV separando los campos adecuadamente
+ * (incluso si tienen comas dentro de campos entre comillas).
+ */
 class CSVParser {
 private:
     // Funcion de ayuda para separar una línea respetando las comillas

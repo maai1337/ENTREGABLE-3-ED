@@ -25,6 +25,12 @@ size_t estimateUnorderedMapMemory(const unordered_map<string, int>& um) {
     return mem;
 }
 
+/**
+ * @brief Ejecuta una serie de experimentos insertando tweets
+ * en distintas implementaciones de tablas hash (Chaining, Closed, STL).
+ * Mide tanto los tiempos de ejecucion iterativos como la memoria final
+ * almacenando los resultados en archivos CSV.
+ */
 void runExperiments() {
     string dataset = "auspol2019";
     string filename = "auspol2019.csv";
